@@ -35,7 +35,7 @@ pub struct Global {
     pub fullcontext_format: String,
     pub fullcontext_version: String,
     pub gv_off_context: Vec<String>,
-    pub comment: String,
+    pub comment: Option<String>,
 }
 
 impl TryFrom<Global> for crate::model::voice::GlobalModelMetadata {
@@ -75,8 +75,8 @@ pub struct StreamData {
     pub vector_length: usize,
     pub num_windows: usize,
     pub is_msd: bool,
-    pub use_gv: bool,
-    pub option: Vec<String>,
+    pub use_gv: Option<bool>,
+    pub option: Option<Vec<String>>,
 }
 
 impl From<StreamData> for crate::model::voice::StreamModelMetadata {
@@ -85,8 +85,8 @@ impl From<StreamData> for crate::model::voice::StreamModelMetadata {
             vector_length: value.vector_length,
             num_windows: value.num_windows,
             is_msd: value.is_msd,
-            use_gv: value.use_gv,
-            option: value.option,
+            use_gv: value.use_gv.unwrap_or_else(|| false),
+            option: value.option.unwrap_or_else(|| Vec::<String>::new()),
         }
     }
 }
@@ -185,7 +185,7 @@ COMMENT:
                 fullcontext_format: "HTS_TTS_JPN".to_string(),
                 fullcontext_version: "1.0".to_string(),
                 gv_off_context: vec!["*-sil+*".to_string(), "*-pau+*".to_string()],
-                comment: "".to_string(),
+                comment: Some("".to_string()),
             }
         );
     }
@@ -219,8 +219,8 @@ OPTION[LPF]:
                             vector_length: 35,
                             is_msd: false,
                             num_windows: 3,
-                            use_gv: true,
-                            option: vec!["ALPHA=0.55".to_string()],
+                            use_gv: Some(true),
+                            option: Some(vec!["ALPHA=0.55".to_string()]),
                         },
                     ),
                     (
@@ -229,8 +229,8 @@ OPTION[LPF]:
                             vector_length: 1,
                             is_msd: true,
                             num_windows: 3,
-                            use_gv: true,
-                            option: vec![],
+                            use_gv: Some(true),
+                            option: Some(vec![]),
                         },
                     ),
                     (
@@ -239,8 +239,8 @@ OPTION[LPF]:
                             vector_length: 31,
                             is_msd: false,
                             num_windows: 1,
-                            use_gv: false,
-                            option: vec![],
+                            use_gv: Some(false),
+                            option: Some(vec![]),
                         },
                     )
                 ])

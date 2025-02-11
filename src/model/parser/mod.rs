@@ -137,7 +137,7 @@ fn parse_data_section(
                     + (stream_data.is_msd as usize),
             )?;
 
-            let gv_model = if stream_data.use_gv {
+            let gv_model = if stream_data.use_gv.unwrap_or(false) {
                 let gv_model = parse_model(
                     input,
                     pos.gv_tree.ok_or(ModelParseError::UseGvError)?,
